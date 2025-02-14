@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WatchlistTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02f0b2ea55d9489fdf2158889c3669cfbbf1f7d2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ca8c449266086c272b45f53bb47092ec5caf25b")]
 [assembly: System.Reflection.AssemblyProductAttribute("WatchlistTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WatchlistTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

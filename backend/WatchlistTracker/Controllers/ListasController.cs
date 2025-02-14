@@ -20,9 +20,17 @@ namespace WatchlistTracker.Controllers
 
         // Obtener todas las listas del usuario autenticado
         [HttpGet]
+        [Authorize]
         public IActionResult GetListas()
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            // Obtener el ID del usuario desde los claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized(new { message = "Error al obtener el ID del usuario." });
+            }
+
             var listas = _context.Listas.Where(l => l.UsuarioId == userId).ToList();
             return Ok(listas);
         }

@@ -44,14 +44,14 @@ CREATE TABLE ListasContenidos (
 
 using BCrypt.Net;
 
-Console.WriteLine(BCrypt.HashPassword("testpassword1")); > $2a$11$uJf5dFX4Jdf9sQqLAlnZY.BE7kDxtms9M3UQZBjtFDeBcBGR.aXWa
-Console.WriteLine(BCrypt.HashPassword("testpassword2")); > $2a$11$K5XdhAVFJBLrSPyBo/uvL.0HKjQUqZPbb0XyZckxvcBZvFwmeU52G
+Console.WriteLine(BCrypt.HashPassword("testpassword1")); > $2a$11$pu4NwwF7YvukJV7pC3QqPO.eM8OzT0DhpkwI1V2oj.b.BRP77VI2e
+Console.WriteLine(BCrypt.HashPassword("testpassword2")); > $2a$11$b0DQeXFgEHtvEEjv4yAff.D35nYEf51b8VqmZbRzJZ94Ey/cF6SxW
 
 */
 -- Insertar Usuarios de Prueba
 INSERT INTO Usuarios (Username, PasswordHash) VALUES 
-('usuario1', '$2a$11$uJf5dFX4Jdf9sQqLAlnZY.BE7kDxtms9M3UQZBjtFDeBcBGR.aXWa'),
-('usuario2', '$2a$11$K5XdhAVFJBLrSPyBo/uvL.0HKjQUqZPbb0XyZckxvcBZvFwmeU52G');
+('usuario1', '$2a$11$pu4NwwF7YvukJV7pC3QqPO.eM8OzT0DhpkwI1V2oj.b.BRP77VI2e'),
+('usuario2', '$2a$11$b0DQeXFgEHtvEEjv4yAff.D35nYEf51b8VqmZbRzJZ94Ey/cF6SxW');
 
 -- Insertar Películas y Series de Prueba
 INSERT INTO PeliculasSeries (Titulo, Categoria, Tipo, Temporadas, CapitulosPorTemporada) VALUES 
