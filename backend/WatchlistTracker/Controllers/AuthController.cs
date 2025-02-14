@@ -31,7 +31,8 @@ namespace WatchlistTracker.Controllers
                 return BadRequest(new { message = "El usuario ya existe" });
             }
 
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash, 11);
+            
             _context.Usuarios.Add(user);
             _context.SaveChanges();
 
@@ -39,16 +40,35 @@ namespace WatchlistTracker.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] Usuario user)
+        public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-            var existingUser = _context.Usuarios.FirstOrDefault(u => u.Username == user.Username);
-
-            if (existingUser == null || !BCrypt.Net.BCrypt.Verify(user.PasswordHash, existingUser.PasswordHash))
+            if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
             {
-                return Unauthorized(new { message = "Credenciales incorrectas" });
+                return BadRequest(new { message = "El usuario y la contraseña son obligatorios." });
             }
 
-            var token = GenerateJwtToken(existingUser);
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Username == loginRequest.Username);
+            if (usuario == null)
+            {
+                return Unauthorized(new { message = "Credenciales incorrectas." });
+            }
+
+            // 🔍 **Depuración: Compara la contraseña ingresada con el hash en la BD**
+            Console.WriteLine($"Contraseña ingresada: {loginRequest.Password}");
+            Console.WriteLine($"Hash en la BD: {usuario.PasswordHash}");
+
+            string generatedHash = BCrypt.Net.BCrypt.HashPassword(loginRequest.Password);
+            Console.WriteLine($"Hash generado con la contraseña ingresada: {generatedHash}");
+
+            bool esValida = BCrypt.Net.BCrypt.Verify(loginRequest.Password, usuario.PasswordHash);
+            Console.WriteLine($"¿La contraseña ingresada es válida? {esValida}");
+
+            if (!esValida)
+            {
+                return Unauthorized(new { message = "Credenciales incorrectas." });
+            }
+
+            var token = GenerateJwtToken(usuario);
             return Ok(new { token });
         }
 
@@ -60,7 +80,8 @@ namespace WatchlistTracker.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("UserId", user.Id.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -73,6 +94,7 @@ namespace WatchlistTracker.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
         [Authorize]
         [HttpGet("protected")]
